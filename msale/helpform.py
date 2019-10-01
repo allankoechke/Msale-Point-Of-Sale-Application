@@ -28,7 +28,7 @@ class HelpForm(QtWidgets.QWidget):
         self.widget.emailBtn.clicked.connect(self.send_email)
 
     def view_sourcecode(self):
-        webbrowser.open_new_tab("https://github.com/lalan-ke/Point-Of-Sale-PyQt-PySide")
+        webbrowser.open_new_tab("https://github.com/lalan-ke/Msale-Point-Of-Sale-Application")
 
     def send_email(self):
         dlg = EmailDialog()
