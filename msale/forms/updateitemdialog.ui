@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
-    <height>480</height>
+    <width>809</width>
+    <height>585</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>670</width>
-    <height>480</height>
+    <width>800</width>
+    <height>550</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">*{
-background-color:rgba(54,54,54);
+background-color:rgb(54,54,54);
 color: white;
 font: 12pt ;
 

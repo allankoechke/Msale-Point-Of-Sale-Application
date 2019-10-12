@@ -1,40 +1,5 @@
 import hashlib, sys, os, uuid, psycopg2
 from PyQt5 import QtWidgets,QtGui
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-
-USERNAME = "postgres_mysale"#username" #postgres database login username
-PASSWORD = "postgresdb_mysale"#password" #postgres database login password
-
-class CreateDb:
-
-    # Create Application Database
-    #  
-
-    def __init__(self):
-        self.STATUS = False
-        self.create_database()
-
-    def create_database(self):
-        try:
-            con = psycopg2.connect(host = "localhost", database = "mysale", password = PASSWORD, user= USERNAME) 
-            con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-            cursor = con.cursor()
-            sql = "SELECT 1 FROM pg_catalog.pg_database WHERE datname = '{}'".format("mysale")
-            cursor.execute(sql)
-            exists = cursor.fetchone()
-            if not exists:
-                cursor.execute('CREATE DATABASE mysale')
-                con.commit()
-                self.STATUS = True
-            else:
-                self.STATUS = True
-                
-        except psycopg2.DatabaseError as e:
-            self.STATUS = False
-            print("Error at postgres :: >" +str(e))
-
-    def get_status(self):
-        return self.STATUS
 
 class Database():
     # Connect to PostGress Database
@@ -44,7 +9,7 @@ class Database():
     def connect_db(self):
         self.connected = False
         try:
-            self.connection = psycopg2.connect(host = "localhost",  database = "mysale", user = USERNAME, password = PASSWORD)
+            self.connection = psycopg2.connect(host = "localhost",  database = "mysale", user = "postgres_mysale", password = "postgresdb_mysale")
             self.cursor = self.connection.cursor()
             self.connected = True
             self.create_tables()
@@ -62,6 +27,37 @@ class Database():
     def is_connected(self):
         # returns database connection status
         return self.connected
+
+    def super_admin(self):
+        y = PasswordActions()
+        z = y.hash_password("E5HIQFSn")
+
+        admin_ = PasswordActions()
+        admin = admin_.hash_password("123456")
+
+        try:
+            a = self.check_if_exists("user","username",'MySale')
+            b = self.check_if_exists("user","username",'Asiso')
+            if a == True:
+                pass
+
+            else:
+                sql = """INSERT INTO "user"(firstname,lastname,gender,mobile_no,username,password,admin) \
+                    VALUES('Technical','',2,0700000000,'MySale','{}',3);""".format(z)
+                self.cursor.execute(sql)
+                self.connection.commit()
+
+            if b == True:
+                pass
+
+            else:
+                sql_admin = """INSERT INTO "user"(firstname,lastname,gender,mobile_no,username,password,admin) \
+                    VALUES('Tenai','',2,07000000001,'Asiso','{}',3);""".format(admin)
+                self.cursor.execute(sql_admin)
+                self.connection.commit()
+
+        except Exception as a:
+            print(">> Error at super user: "+str(a))
 
     def check_connection(self):
         return self.connected
@@ -186,38 +182,6 @@ class Database():
 
             except Exception as e:
                 print("Error Creating Tables :: "+str(e))
-
-    def super_admin(self):
-        y = PasswordActions()
-        z = y.hash_password("E5HIQFSn")
-
-        admin_ = PasswordActions()
-        admin = admin_.hash_password("123456")
-
-        try:
-            a = self.check_if_exists("user","username",'MySale')
-            b = self.check_if_exists("user","username",'Asiso')
-            if a == True:
-                pass
-
-            else:
-                sql = """INSERT INTO "user"(firstname,lastname,gender,mobile_no,username,password,admin) \
-                    VALUES('Technical','',2,0700000000,'MySale','{}',3);""".format(z)
-                self.cursor.execute(sql)
-                self.connection.commit()
-
-            if b == True:
-                pass
-
-            else:
-                sql_admin = """INSERT INTO "user"(firstname,lastname,gender,mobile_no,username,password,admin) \
-                    VALUES('Tenai','A.',2,07000000001,'Asiso','{}',3);""".format(admin)
-                self.cursor.execute(sql_admin)
-                self.connection.commit()
-
-        except Exception as a:
-            print(">> Error at super user: "+str(a))
-
                 
     def check_if_exists(self,table_x,col_x,var_x):
         try:

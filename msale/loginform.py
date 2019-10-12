@@ -44,6 +44,7 @@ class LoginForm(QtWidgets.QMainWindow):
     def createuser(self):
         dlg = NewUserDialog()
         dlg.exec_()
+        self.hide_createuser()
 
     def login_into(self):
         #open Dashboard if successful

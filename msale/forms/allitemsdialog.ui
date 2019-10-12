@@ -6,15 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
-    <height>551</height>
+    <width>800</width>
+    <height>500</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>-1</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
   </property>
   <property name="windowTitle">
    <string>All Items</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog, QTableWidget{
+   <string notr="true">
+QDialog, QTableWidget{
 background-color:rgb(54,54,54);
 color:white;
 font:12px;

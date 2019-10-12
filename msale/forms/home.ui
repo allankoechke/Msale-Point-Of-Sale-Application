@@ -875,8 +875,6 @@ border:3px solid orange;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="main.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

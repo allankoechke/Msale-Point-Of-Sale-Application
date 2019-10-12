@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtCore, QtGui, uic
 from threading import Thread
+import subprocess
 
 from msale.database import db
 import pendulum
@@ -25,6 +26,7 @@ class Ui_Home(QtWidgets.QWidget):
 
         self.widget.switchUserBtn.clicked.connect(self.switch_user)
         self.widget.logoutBtn.clicked.connect(self.logout_user)
+        self.widget.backupDbBtn.clicked.connect(self.backup_db)
         #self.widget.logoutBtn.setEnabled(True)
         #self.widget.switchUserBtn.setEnabled(True)
 
@@ -55,6 +57,22 @@ class Ui_Home(QtWidgets.QWidget):
     def logout_user(self):
         # Close Application
         self.father.CloseWindow()
+
+    def backup_db(self):
+        '''
+        import os, datetime
+        pth2 = "{}\\Documents\\MySale Backup"
+        if not os.path.isdir(pth2):
+            os.makedirs(pth2)
+            print("Path Created")
+
+        p = datetime.datetime.now()
+        arg = f"backup_{p.year}-{p.month}-{p.day}-{p.hour}-{p.minute}.sql"
+        print(arg)
+        pth = "{}\\msale\\batch\\backup.bat, {}".format(os.getcwd(),arg)
+        print(pth)
+        subprocess.call([pth])'''
+        pass
 
     def notify(self):
         self.cursor = db.Database().connect_db().cursor()
