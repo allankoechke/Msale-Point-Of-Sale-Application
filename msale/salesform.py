@@ -4,7 +4,7 @@ from msale.salesdialog import SalesDialog
 from msale.dialog import Dialog
 from msale.undosaledialog import UndoSaleDialog
 from msale.icons import resources
-from msale.x import XP
+from msale.x import XP # Printing
 
 class SalesForm(QtWidgets.QWidget):
     def __init__(self,user):
@@ -15,10 +15,11 @@ class SalesForm(QtWidgets.QWidget):
         //set the icons not loaded dynamically by the UiLoader
         """
         QtWidgets.QWidget.__init__(self)
-        
-        self.widget = uic.loadUi("msale/forms/salesform.ui",self)
         self.user = user
-
+        
+        #Load UI
+        self.widget = uic.loadUi("msale/forms/salesform.ui",self)
+        
         # Setup Icons
         self.widget.todaysSalesBtn.setIcon(QtGui.QIcon(":/icons/today_sales_w.png"))
         self.widget.allSalesBtn.setIcon(QtGui.QIcon(":/icons/t_sales_w.png"))
@@ -36,19 +37,23 @@ class SalesForm(QtWidgets.QWidget):
         self.widget.generateplistBtn.clicked.connect(self.compare_sales)
 
     def undo_sale(self):
+        # Initializes a window to undo sales done
         dlg = UndoSaleDialog(self)
         dlg.setUser(self.user)
         dlg.exec_()
 
     def show_todays_sales(self):
+        # Initializes a window to show today's sales
         dlg = SalesDialog("Todays Sales")
         dlg.todays_sales()
         dlg.exec_()
 
     def show_all_sales(self):
+        # Initializes a window to show all sales
         dlg = SalesDialog("All Sales")
         dlg.selectionCB()
         dlg.exec_()
 
     def compare_sales(self):
+        # Initializes a window to generate a pricelist
         XP().generate_price_list()

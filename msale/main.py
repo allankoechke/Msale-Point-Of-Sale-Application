@@ -23,17 +23,13 @@ import pendulum
 class MainForm(QtWidgets.QMainWindow):
     def __init__(self):
 
-        """
-        MainWindow for the MS Point of sale software
-        //Initialize dynamically the ui
-        //set the icons not loaded dynamically by the UiLoader
-        //Setup slot functions for the signals sent by the dynamic Ui
-        """
         QtWidgets.QMainWindow.__init__(self)
         self.setWindowFlags(QtCore.Qt.Window|QtCore.Qt.CustomizeWindowHint)
 
+        # Load the UI
         self.widget = uic.loadUi("msale/forms/main.ui",self)
         
+        # Setup the icons for the labels and buttons
         self.widget.HomeBtn.setIcon(QtGui.QIcon(":/icons/home_48px_grey.png"))
         self.widget.StockMenu.setIcon(QtGui.QIcon(":/icons/move_by_trolley_52px_grey.png"))
         self.widget.SalesMenu.setIcon(QtGui.QIcon(":/icons/sales_60px_grey.png"))
@@ -52,12 +48,14 @@ class MainForm(QtWidgets.QMainWindow):
         self.widget.LOGOLABEL.setIcon(QtGui.QIcon(":/icons/icon1.png"))
         self.widget.notificationBtn.setIcon(QtGui.QIcon(":/icons/notify_white.png"))
 
+        # Setup signals and slots
         self.widget.aboutBtn.clicked.connect(self.OpenAboutDialog)
         self.widget.helpBtn.clicked.connect(self.OpenInfoDialog)
         self.widget.notificationBtn.clicked.connect(self.OpenNotification)
         self.widget.CreditsMenu.clicked.connect(self.OpenDebts)
 
         self.widget.SettingsMenu.hide()
+
         #Initialize the home window
         self.active_win = QtWidgets.QWidget()
         self.setLogin()
@@ -68,11 +66,10 @@ class MainForm(QtWidgets.QMainWindow):
         self.set_datetime()
 
         self.showMaximized()
-    
-    def createDatabase(self):
-        pass
 
     def setLogin(self):
+        # Sets the UI for the login process
+        # Hides the navigation bar and other controls on the UI
         self.uncheck_all()
         self.widget.TitleWindow.setText("Login Window")
         self.widget.LeftMenu.hide()
@@ -86,12 +83,15 @@ class MainForm(QtWidgets.QMainWindow):
 
     def unset_login(self):
         # Undo settings done by the login screen
+        # Shows the navigation bar and other controls on the UI
+
         self.widget.LeftMenu.show()
         self.widget.MenuToggle.show()
         self.OpenDashboard()
         self.widget.notificationBtn.setDisabled(False)
 
     def uncheck_all(self):
+        # To uncheck all QPushButtons on the navigation bar
         self.widget.HomeBtn.setChecked(False)
         self.widget.StockMenu.setChecked(False)
         self.widget.SalesMenu.setChecked(False)
@@ -242,6 +242,7 @@ class MainForm(QtWidgets.QMainWindow):
         ui.exec()
 
     def check_notifications(self):
+        # Checks for any pending notifications or reminders due today(Current Date)
         self.cursor = db.Database().connect_db().cursor()
 
         a = pendulum.now()
@@ -270,11 +271,8 @@ class MainForm(QtWidgets.QMainWindow):
         for i in x:
             self.user.append(i)
 
-        if self.user[2] == 0:
+        if self.user[2] == 0 or self.user[2] == 1:
             role = "Teller"
-
-        elif self.user[2] == 1:
-            role = "Admin"
 
         else:
             role = "Database Admin"

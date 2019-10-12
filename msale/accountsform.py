@@ -13,15 +13,19 @@ from msale.icons import resources
 class AccountsForm(QtWidgets.QWidget):
     def __init__(self,user,daddy):
         QtWidgets.QWidget.__init__(self)
-        self.widget = uic.loadUi("msale/forms/accountsform.ui",self)
         self.user = user
         self.daddy = daddy
 
+        # Load the UI
+        self.widget = uic.loadUi("msale/forms/accountsform.ui",self)
+
+        # Setup the icons
         self.widget.newAccountBtn.setIcon(QtGui.QIcon(":/icons/add_user_w.png"))
         self.widget.reloadAccountsBtn.setIcon(QtGui.QIcon(":/icons/reload_w.png"))
         self.widget.newcAccountBtn.setIcon(QtGui.QIcon(":/icons/add_user_w.png"))
         self.widget.reloadcAccountsBtn.setIcon(QtGui.QIcon(":/icons/reload_w.png"))
 
+        # Setup the Signals & Slots
         self.widget.newcAccountBtn.clicked.connect(self.new_crediteeAccount)
         self.widget.reloadAccountsBtn.clicked.connect(self.load_accounts)
         self.widget.reloadcAccountsBtn.clicked.connect(self.load_crediteeaccounts)
@@ -32,7 +36,7 @@ class AccountsForm(QtWidgets.QWidget):
         self.load_crediteeaccounts()
 
     def load_accounts(self):
-        
+        # Loads all accounts in the db
         sql_user = """SELECT username, firstname, lastname, mobile_no, admin FROM "user" """
         
         cursor = db.Database().connect_db().cursor()
@@ -48,7 +52,7 @@ class AccountsForm(QtWidgets.QWidget):
             i = 0
             for x in range(len(ret2)):
                 uname = ret2[x][0]
-                name = "{} {}".format(ret2[x][1], ret2[x][2])
+                name = f"{ret2[x][1]} {ret2[x][2]}"
                 no =ret2[x][3]
                 admin = ret2[x][4]
 
@@ -64,7 +68,7 @@ class AccountsForm(QtWidgets.QWidget):
             print(e)
 
     def load_crediteeaccounts(self):
-
+        # Loads all creditee accounts(debtees)
         sql_user = """SELECT cp_firstname, cp_lastname, cp_mobile_no, cp_balance FROM "credit_person" """
         cursor = db.Database().connect_db().cursor()
         try:  
@@ -75,7 +79,7 @@ class AccountsForm(QtWidgets.QWidget):
             self.widget.crediteeTbl.setRowCount(len(ret2))
 
             for x in range(len(ret2)):
-                name = "{} {}".format(ret2[x][0], ret2[x][1])
+                name = f"{ret2[x][0]} {ret2[x][1]}"
                 no =ret2[x][2]
                 bal = ret2[x][3]
 
@@ -86,19 +90,23 @@ class AccountsForm(QtWidgets.QWidget):
             print(e)
 
     def new_crediteeAccount(self):
+        # For creating a new creditee account
         ui = NewCrediteeDialog(self)
         ui.exec_()
         self.load_crediteeaccounts()
 
     def auto_complete(self):
+        # Setup autocompletion
         pass
 
     def new_userAccount(self):
+        # For creating new user accounts
         ui = NewUserDialog()
         ui.exec_()
         self.load_accounts()
 
     def change_password(self):
+        # For setting up a change password dialog
         ui = ChangePasswordDialog()
         ui.exec_()
 

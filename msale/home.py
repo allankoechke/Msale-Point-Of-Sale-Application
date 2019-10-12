@@ -9,21 +9,19 @@ from msale.icons import resources
 class Ui_Home(QtWidgets.QWidget):
     def __init__(self,father,time_):
 
-        """
-        Home Window for the MS Point of sale software
-        //Initialize dynamically the ui
-        //set the icons not loaded dynamically by the UiLoader
-        //Setup slot functions for the signals sent by the dynamic Ui
-        """
         QtWidgets.QWidget.__init__(self)
         self.father = father
+        self.time_ = time_
         
+        # Load the UI
         self.widget = uic.loadUi("msale/forms/home.ui",self)
 
+        # Setup icons to the buttons
         self.widget.backupDbBtn.setIcon(QtGui.QIcon(":/icons/database_backup_48px_white.png"))
         self.widget.switchUserBtn.setIcon(QtGui.QIcon(":/icons/change_user_white.png"))
         self.widget.logoutBtn.setIcon(QtGui.QIcon(":/icons/logout_white.png"))
 
+        # Setup signals & slots
         self.widget.switchUserBtn.clicked.connect(self.switch_user)
         self.widget.logoutBtn.clicked.connect(self.logout_user)
         self.widget.backupDbBtn.clicked.connect(self.backup_db)
@@ -43,15 +41,14 @@ class Ui_Home(QtWidgets.QWidget):
         thread = Thread(target = self.count_creditsales, args = ())
         thread.start()
         
-        self.time_ = time_
         self.setupTime()
 
     def setupTime(self):
         self.widget.datetimeLbl.setText(self.time_)
 
     def switch_user(self):
-        # Switch to login window
-        self.father.setNoUser()
+        # Logout current user and prompt login of another user
+        self.father.setNoUser() # Sets no user logged in 
         self.father.setLogin()
 
     def logout_user(self):
@@ -59,6 +56,8 @@ class Ui_Home(QtWidgets.QWidget):
         self.father.CloseWindow()
 
     def backup_db(self):
+        # TODO 
+        # Initiate whole database backup
         '''
         import os, datetime
         pth2 = "{}\\Documents\\MySale Backup"
@@ -75,6 +74,9 @@ class Ui_Home(QtWidgets.QWidget):
         pass
 
     def notify(self):
+        # Sets up the notification badges, sets RED and badge counter if any
+        # for both debts due Current day and cheque reminders
+
         self.cursor = db.Database().connect_db().cursor()
 
         a = pendulum.now()

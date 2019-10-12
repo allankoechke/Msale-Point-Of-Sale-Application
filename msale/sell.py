@@ -11,34 +11,30 @@ import pendulum
 
 class Ui_Sell(QtWidgets.QWidget):
     def __init__(self,user):
-
-        
-        """
-        Sell Widget for the MS Point of sale software
-        //Initialize dynamically the ui
-        //set the icons not loaded dynamically by the UiLoader
-        //Setup slot functions for the signals sent by the dynamic Ui
-        """
         QtWidgets.QWidget.__init__(self)
-        
-        self.widget = uic.loadUi("msale/forms/sell.ui",self)
         self.user = user
-
+        
+        # Load the UI
+        self.widget = uic.loadUi("msale/forms/sell.ui",self)
+        
+        # Setup button icons
         self.widget.AddToCartBtn.setIcon(QtGui.QIcon(":/icons/add_shopping_cart_48px_gray.png"))
         self.widget.SearchBtn.setIcon(QtGui.QIcon(":/icons/search_database_48px_grey.png"))
 
+        # Setup Signals & Slots
         self.widget.AddToCartBtn.clicked.connect(self.add_item_to_table)
         self.widget.payoptionBtn.clicked.connect(self.open_other_payments)
         self.widget.cashpaymentBtn.clicked.connect(self.complete_transaction_cash)
         self.widget.cashamountLE.textChanged.connect(self.update_balance)
-        
-        self.possible_list = []
-        self.sum = 0.0
-        self.set_AutoComplete() # Set Autocompleter
 
+        # Setup KeyBoard Shortcuts
         QtWidgets.QShortcut(QtGui.QKeySequence("F7"),self,self.complete_transaction_cash)
         QtWidgets.QShortcut(QtGui.QKeySequence("F5"),self,self.add_item_to_table)
         QtWidgets.QShortcut(QtGui.QKeySequence("F6"),self,self.open_other_payments)
+
+        self.possible_list = []
+        self.sum = 0.0
+        self.set_AutoComplete() # Set Autocompleter
 
     @QtCore.pyqtSlot()
     def open_searchWindow(self):
@@ -46,6 +42,7 @@ class Ui_Sell(QtWidgets.QWidget):
         search.show()
 
     def set_AutoComplete(self):
+        # Sets up autocompletion mode for the QLineEdits
         self.possible_list.clear() 
         self.mydb = db.Database().connect_db()
         self.cursor = self.mydb.cursor()
@@ -162,6 +159,7 @@ class Ui_Sell(QtWidgets.QWidget):
             self.show_msg(y)
 
     def clear_all_(self):
+        # Clears all QLIneEdits, QTableWidgets, QLabels and QSpinBoxes
         self.widget.searchLE.setText('')
         self.widget.tableWidget.setRowCount(0)
         self.widget.totalsLabel.setText(str(0.0))
@@ -236,6 +234,7 @@ class Ui_Sell(QtWidgets.QWidget):
             self.db.close()
 
     def update_balance(self):
+        # Updates the customer cash balance as amount paid is being typed in
         paid = self.widget.cashamountLE.text()
         if len(paid) == 0:
             self.widget.changeamountLE.setText(str(0.0))
@@ -254,6 +253,7 @@ class Ui_Sell(QtWidgets.QWidget):
         msg.exec_()
 
     def open_other_payments(self):
+        # Initializes and opens a new window for the other payment modes
         if self.widget.tableWidget.rowCount() == 0:
             self.show_msg("Failed, no Item Has been added to Cart!")
 
