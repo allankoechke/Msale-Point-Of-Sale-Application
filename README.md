@@ -1,10 +1,11 @@
 # Point Of Sale
  Simple GUI Point Of Sale Software utilizing Python, PostgreSql and PyQt5/PySide2
+ It does inventory management, sales processing and report generation.
 
- Libraries Used:
-    Python3
-    Pendulum
-    PyQt5
+# Libraries Used:
+   > Python3
+   > Pendulum
+   > PyQt5
  Simple GUI Point Of Sale Software utilizing Python, PostgreSql and PyQt5
  
 ![home](https://user-images.githubusercontent.com/44490960/65997279-be97d580-e4a1-11e9-9de5-5fde859eec7a.PNG)
