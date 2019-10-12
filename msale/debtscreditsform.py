@@ -10,25 +10,21 @@ from msale.debtsdialog import DebtsDialog
 class CreditsForm(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-        """
-        Credits And Debts Window for the MS Point of sale software
-        //Initialize dynamically the ui
-        //set the icons not loaded dynamically by the UiLoader
-        //Setup slot functions for the signals sent by the dynamic Ui
-        """
-        QtWidgets.QWidget.__init__(self)
         
+        # Load the UI
         self.widget = uic.loadUi("msale/forms/creditsform.ui",self)
 
-        self.db = db.Database().connect_db()
-        self.cursor = self.db.cursor()
-
+        # Setup the Signals & Slots
         self.widget.viewcredititemsBtn.clicked.connect(self.open_view_details) # on_clicked
         self.widget.pushButton_credit_pay_update.clicked.connect(self.update_account_amount_paid) # on_clicked
         self.widget.pushButton_credits_back.clicked.connect(self.go_back_to_tab1)
         self.widget.pushButton_credits_new_creditee.clicked.connect(self.open_new_creditee) # on_clicked
+
+        # Initialize the database
+        self.db = db.Database().connect_db()
+        self.cursor = self.db.cursor()
+
         self.load_creditees()
-        
         self.widget.stackedWidget.setCurrentIndex(0)
 
     def load_creditees(self):
